@@ -1,0 +1,88 @@
+You are an expert full-stack engineer. Build a **minimal appointment booking web app** for a small clinic that works end-to-end and can be deployed for free.  
+
+## Tech Stack
+- Backend: Node.js + Express + Prisma ORM + PostgreSQL (Neon free tier)
+- Auth: JWT-based authentication with role-based access (patient/admin)
+- Frontend: ReactJS (Vite) + minimal styling (Tailwind CSS)
+- Deployment:  
+  - Backend on Render (free tier)  
+  - Frontend on Vercel (free tier)  
+  - DB on Neon (Postgres free tier)  
+- Time zone: UTC
+
+## Core Functionality
+### Patient
+- Register (`POST /api/register`)
+- Login (`POST /api/login`)
+- View available slots for the next 7 days (`GET /api/slots`)  
+  - Slots: 30-min blocks between 09:00–17:00 UTC
+- Book a slot (`POST /api/book`) – prevent double booking
+- View their bookings (`GET /api/my-bookings`)
+
+### Admin
+- Login (`POST /api/login`)
+- View all bookings (`GET /api/all-bookings`)
+
+## API Requirements
+- Persistent storage in Postgres
+- Tables:
+  - `users`: id, name, email, password_hash, role (`patient` or `admin`), created_at
+  - `slots`: id, start_at, end_at, created_at
+  - `bookings`: id, user_id, slot_id (unique), created_at
+- Prevent double-booking via unique constraint on slot_id in bookings
+- Return proper HTTP codes and JSON error responses
+- Auth middleware to protect routes
+- Role-based access control for admin endpoints
+- Input validation & error handling for all routes
+- Password hashing (bcrypt)
+- CORS allowlist
+
+## Frontend Requirements
+- ReactJS + TailwindCSS
+- Routes:
+  - `/register` – form for patient registration
+  - `/login` – login form for patient/admin
+  - `/patient` – dashboard for available slots, booking, and “My Bookings” view
+  - `/admin` – dashboard to list all bookings
+- Persist auth token in localStorage
+- Show API errors clearly
+- Basic loading states
+- Use fetch() for API calls
+
+## Seed Data
+- One admin user (`admin@clinic.com` / password: `admin123`)
+- Generate 7 days of slots (09:00–17:00 UTC, 30-min increments) at server startup if empty
+
+## Deployment
+- Backend: Render (Postgres connection via Neon URL in `.env`)
+- Frontend: Vercel (point to deployed backend URL)
+- Environment variables in README
+- README should contain:
+  - Tech stack
+  - How to run locally
+  - How to deploy
+  - Test credentials
+  - API endpoints table
+  - Architecture notes
+  - Known limitations & future improvements
+
+## Testing
+- Provide a Postman collection or curl commands for register/login/book/view flow
+- Minimal backend integration tests for booking logic
+
+## Security
+- Hashed passwords
+- No hardcoded secrets
+- Rate-limiting login endpoint
+
+## Deliverables
+- Working deployed frontend & backend (URLs in README)
+- Public GitHub repo with commit history
+- README following above points
+- App should meet:
+  - Patient can register/login/book/view bookings
+  - Admin can login/view all bookings
+  - No double booking possible
+  - Auth persists across refresh
+
+Please implement **backend first**, then **frontend**, then seed data, then deploy both, then write README and seed script.
